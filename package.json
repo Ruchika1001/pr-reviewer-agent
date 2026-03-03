@@ -1,0 +1,19 @@
+{
+  "name": "github-pr-agent",
+  "version": "1.0.0",
+  "description": "GitHub PR review bot powered by Claude — activates on sre-agent label",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "@octokit/rest": "latest",
+    "dotenv": "latest",
+    "express": "^4"
+  }
+}
