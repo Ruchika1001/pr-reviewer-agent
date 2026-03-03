@@ -1,8 +1,8 @@
-const config = require("../config");
+import config from "../config.js";
 
 const BASE_URL = `https://api.telegram.org/bot${config.telegramBotToken}`;
 
-async function sendMessage(text) {
+export async function sendMessage(text) {
   try {
     const res = await fetch(`${BASE_URL}/sendMessage`, {
       method: "POST",
@@ -22,15 +22,13 @@ async function sendMessage(text) {
   }
 }
 
-async function notifyReviewStarted(prNumber, title, url) {
+export async function notifyReviewStarted(prNumber, title, url) {
   await sendMessage(
     `🔍 Review started for PR #${prNumber}: ${title}\n${url}`
   );
 }
 
-async function notifyReviewComplete(prNumber, approved) {
+export async function notifyReviewComplete(prNumber, approved) {
   const icon = approved ? "✅" : "💬";
   await sendMessage(`${icon} Review complete for PR #${prNumber}`);
 }
-
-module.exports = { sendMessage, notifyReviewStarted, notifyReviewComplete };

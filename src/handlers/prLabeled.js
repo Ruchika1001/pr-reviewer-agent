@@ -1,8 +1,8 @@
-const github = require("../services/github");
-const claude = require("../services/claude");
-const telegram = require("../services/telegram");
+import * as github from "../services/github.js";
+import * as claude from "../services/claude.js";
+import * as telegram from "../services/telegram.js";
 
-async function handlePRLabeled(payload) {
+export default async function handlePRLabeled(payload) {
   const owner = payload.repository.owner.login;
   const repo = payload.repository.name;
   const prNumber = payload.pull_request.number;
@@ -12,13 +12,17 @@ async function handlePRLabeled(payload) {
   // Notify Telegram that review has started
   await telegram.notifyReviewStarted(prNumber, prDetails.title, prDetails.url);
 
-  // Fetch diff and file list
+  // Fetch diff and file list in parallel
   const [diff, files] = await Promise.all([
     github.getPRDiff(owner, repo, prNumber),
     github.getPRFiles(owner, repo, prNumber),
   ]);
 
-  // Ask Claude to review
+  console.log(
+    `PR #${prNumber}: ${files.length} files changed, diff size ${diff.length} chars`
+  );
+
+  // Ask Claude to review (files used for summary, diff is auto-truncated if too large)
   const review = await claude.reviewPR({
     title: prDetails.title,
     body: prDetails.body,
@@ -29,7 +33,6 @@ async function handlePRLabeled(payload) {
   // Post review on the PR
   if (review.approve) {
     if (review.comments.length > 0) {
-      // Approve with inline comments
       await github.postReviewComments(
         owner,
         repo,
@@ -49,7 +52,6 @@ async function handlePRLabeled(payload) {
         review.summary
       );
     } else {
-      // No inline comments but not approving — post summary as a regular comment
       await github.postComment(owner, repo, prNumber, review.summary);
     }
   }
@@ -61,5 +63,3 @@ async function handlePRLabeled(payload) {
     `Review complete for ${owner}/${repo}#${prNumber} — approved: ${review.approve}`
   );
 }
-
-module.exports = handlePRLabeled;

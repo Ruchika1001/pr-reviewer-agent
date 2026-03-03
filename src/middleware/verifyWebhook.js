@@ -1,7 +1,7 @@
-const crypto = require("crypto");
-const config = require("../config");
+import crypto from "crypto";
+import config from "../config.js";
 
-function verifyWebhook(req, res, next) {
+export default function verifyWebhook(req, res, next) {
   const signature = req.headers["x-hub-signature-256"];
   if (!signature) {
     return res.status(401).json({ error: "Missing signature" });
@@ -20,5 +20,3 @@ function verifyWebhook(req, res, next) {
 
   next();
 }
-
-module.exports = verifyWebhook;

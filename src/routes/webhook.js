@@ -1,7 +1,7 @@
-const { Router } = require("express");
-const verifyWebhook = require("../middleware/verifyWebhook");
-const handlePRLabeled = require("../handlers/prLabeled");
-const handleCommentMention = require("../handlers/commentMention");
+import { Router } from "express";
+import verifyWebhook from "../middleware/verifyWebhook.js";
+import handlePRLabeled from "../handlers/prLabeled.js";
+import handleCommentMention from "../handlers/commentMention.js";
 
 const router = Router();
 
@@ -47,4 +47,4 @@ router.post("/", verifyWebhook, (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

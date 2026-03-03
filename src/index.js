@@ -1,6 +1,6 @@
-const express = require("express");
-const config = require("./config");
-const webhookRouter = require("./routes/webhook");
+import express from "express";
+import config from "./config.js";
+import webhookRouter from "./routes/webhook.js";
 
 const app = express();
 

@@ -1,9 +1,9 @@
-const { Octokit } = require("@octokit/rest");
-const config = require("../config");
+import { Octokit } from "@octokit/rest";
+import config from "../config.js";
 
 const octokit = new Octokit({ auth: config.githubToken });
 
-async function getPRDiff(owner, repo, prNumber) {
+export async function getPRDiff(owner, repo, prNumber) {
   const { data } = await octokit.pulls.get({
     owner,
     repo,
@@ -13,7 +13,7 @@ async function getPRDiff(owner, repo, prNumber) {
   return data;
 }
 
-async function getPRFiles(owner, repo, prNumber) {
+export async function getPRFiles(owner, repo, prNumber) {
   const { data } = await octokit.pulls.listFiles({
     owner,
     repo,
@@ -23,7 +23,7 @@ async function getPRFiles(owner, repo, prNumber) {
   return data;
 }
 
-async function getPRDetails(owner, repo, prNumber) {
+export async function getPRDetails(owner, repo, prNumber) {
   const { data } = await octokit.pulls.get({
     owner,
     repo,
@@ -38,7 +38,7 @@ async function getPRDetails(owner, repo, prNumber) {
   };
 }
 
-async function postReviewComments(owner, repo, prNumber, comments, summary) {
+export async function postReviewComments(owner, repo, prNumber, comments, summary) {
   await octokit.pulls.createReview({
     owner,
     repo,
@@ -53,7 +53,7 @@ async function postReviewComments(owner, repo, prNumber, comments, summary) {
   });
 }
 
-async function approvePR(owner, repo, prNumber, summary) {
+export async function approvePR(owner, repo, prNumber, summary) {
   await octokit.pulls.createReview({
     owner,
     repo,
@@ -63,7 +63,7 @@ async function approvePR(owner, repo, prNumber, summary) {
   });
 }
 
-async function postComment(owner, repo, issueNumber, body) {
+export async function postComment(owner, repo, issueNumber, body) {
   await octokit.issues.createComment({
     owner,
     repo,
@@ -72,7 +72,7 @@ async function postComment(owner, repo, issueNumber, body) {
   });
 }
 
-async function getComment(owner, repo, commentId) {
+export async function getComment(owner, repo, commentId) {
   const { data } = await octokit.issues.getComment({
     owner,
     repo,
@@ -80,13 +80,3 @@ async function getComment(owner, repo, commentId) {
   });
   return data;
 }
-
-module.exports = {
-  getPRDiff,
-  getPRFiles,
-  getPRDetails,
-  postReviewComments,
-  approvePR,
-  postComment,
-  getComment,
-};

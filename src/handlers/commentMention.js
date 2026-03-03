@@ -1,7 +1,7 @@
-const github = require("../services/github");
-const claude = require("../services/claude");
+import * as github from "../services/github.js";
+import * as claude from "../services/claude.js";
 
-async function handleCommentMention(payload, eventType) {
+export default async function handleCommentMention(payload, eventType) {
   const owner = payload.repository.owner.login;
   const repo = payload.repository.name;
   const commentBody = payload.comment.body;
@@ -29,9 +29,5 @@ async function handleCommentMention(payload, eventType) {
   // Post reply on the PR
   await github.postComment(owner, repo, prNumber, reply);
 
-  console.log(
-    `Replied to comment on ${owner}/${repo}#${prNumber}`
-  );
+  console.log(`Replied to comment on ${owner}/${repo}#${prNumber}`);
 }
-
-module.exports = handleCommentMention;

@@ -1,4 +1,4 @@
-require("dotenv").config();
+import "dotenv/config";
 
 const required = [
   "GITHUB_WEBHOOK_SECRET",
@@ -14,7 +14,7 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
-module.exports = {
+export default {
   githubWebhookSecret: process.env.GITHUB_WEBHOOK_SECRET,
   githubToken: process.env.GITHUB_TOKEN,
   anthropicApiKey: process.env.ANTHROPIC_API_KEY,
